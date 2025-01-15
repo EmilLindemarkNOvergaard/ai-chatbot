@@ -23,7 +23,7 @@ import { useLocalStorage, useWindowSize } from 'usehooks-ts';
 
 import { sanitizeUIMessages } from '@/lib/utils';
 
-import { ArrowUpIcon, ImageIcon, PaperclipIcon, StopIcon } from './icons';
+import { ArrowUpIcon, PaperclipIcon, StopIcon } from './icons';
 import { PreviewAttachment } from './preview-attachment';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
@@ -81,6 +81,13 @@ function PureMultimodalInput({
     }
   };
 
+  const resetHeight = () => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = '98px';
+    }
+  };
+
   const [localStorageInput, setLocalStorageInput] = useLocalStorage(
     'input',
     '',
@@ -119,6 +126,7 @@ function PureMultimodalInput({
 
     setAttachments([]);
     setLocalStorageInput('');
+    resetHeight();
 
     if (width && width > 768) {
       textareaRef.current?.focus();
@@ -293,7 +301,7 @@ function PureAttachmentsButton({
       disabled={isLoading}
       variant="ghost"
     >
-      <ImageIcon size={14} />
+      <PaperclipIcon size={14} />
     </Button>
   );
 }
@@ -349,6 +357,6 @@ function PureSendButton({
 const SendButton = memo(PureSendButton, (prevProps, nextProps) => {
   if (prevProps.uploadQueue.length !== nextProps.uploadQueue.length)
     return false;
-  if (!prevProps.input !== !nextProps.input) return false;
+  if (prevProps.input !== nextProps.input) return false;
   return true;
 });
